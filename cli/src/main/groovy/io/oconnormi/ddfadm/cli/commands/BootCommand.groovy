@@ -11,7 +11,7 @@ import picocli.CommandLine.Option
 @Command(
   description = "Bootstrap a ddf-based system",
   name = "boot",
-  mixinStandardHelpOptions = true,
+  mixinStandardHelpOptions = true
 )
 class BootCommand implements Callable<Void> {
   

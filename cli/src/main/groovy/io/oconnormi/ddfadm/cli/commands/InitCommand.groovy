@@ -14,8 +14,8 @@ import picocli.CommandLine.Option
 * installation as it will allow some options to be ommitted from the "ddfadm boot" command
 **/
 @Command(
-  description = "Initializes a ddfadm environment configuration. This is intended for use with permanent ddf installations"
-  name = "init"
+  description = "Initializes a ddfadm environment configuration. This is intended for use with permanent ddf installations",
+  name = "init",
   mixinStandardHelpOptions = true
 )
 class InitCommand implements Callable<Void> {

@@ -5,10 +5,17 @@ plugins {
 
 allprojects {
   apply plugin: 'groovy'
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
 
   repositories {
     mavenLocal()
     mavenCentral()
+  }
+
+  dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.6'
+    testCompile 'org.spockframework:spock-core:1.2-groovy-2.4'
   }
 }
 
@@ -29,9 +36,7 @@ reckon {
 
 project(':cli') {
   dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.6'
     compile 'info.picocli:picocli:3.5.2'
     compile 'org.slf4j:slf4j-simple:1.7.25'
-    testCompile 'org.spockframework:spock-core:1.2-groovy-2.4'
   }
 }

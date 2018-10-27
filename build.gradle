@@ -1,14 +1,37 @@
 plugins {
-  id 'groovy'
+    id 'org.ajoberstar.reckon' version '0.8.0'
+    id "com.diffplug.gradle.spotless" version "3.14.0"
 }
 
-repositories {
-  mavenLocal()
-  mavenCentral()
+allprojects {
+  apply plugin: 'groovy'
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+  }
 }
 
-dependencies {
-  compile 'org.codehaus.groovy:groovy-all:2.4.6'
-  compile 'org.slf4j:slf4j-simple:1.7.25'
-  testCompile 'org.spockframework:spock-core:1.2-groovy-2.4'
+spotless {
+  java {
+    googleJavaFormat()
+  }
+  groovy {
+    excludeJava()
+    paddedCell()
+  }
+}
+
+reckon {
+  scopeFromProp()
+  stageFromProp('milestone', 'rc', 'final')
+}
+
+project(':cli') {
+  dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.6'
+    compile 'info.picocli:picocli:3.5.2'
+    compile 'org.slf4j:slf4j-simple:1.7.25'
+    testCompile 'org.spockframework:spock-core:1.2-groovy-2.4'
+  }
 }

@@ -1,5 +1,8 @@
 package io.oconnormi.ddfadm.cli
 
+import io.oconnormi.ddfadm.cli.commands.BootCommand
+import io.oconnormi.ddfadm.cli.commands.InitCommand
+
 import java.util.concurrent.Callable
 import picocli.CommandLine.Command
 import picocli.CommandLine.Option
@@ -10,12 +13,17 @@ import picocli.CommandLine.Option
 @Command(
   description = "Utility for automating setup/configuration for ddf based systems",
   name = "ddfadm",
-  mixinStandardHelpOptions = true
+  mixinStandardHelpOptions = true,
+  subcommands = [
+    BootCommand.class,
+    InitCommand.class
+  ]
 )
 class Ddfadm implements Callable<Void> {
 
   @Override
   public Void call() throws Exception {
     println "Nothing to see here..."
+    return null
   }
 }

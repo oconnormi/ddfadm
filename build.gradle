@@ -40,3 +40,12 @@ project(':cli') {
     compile 'org.slf4j:slf4j-simple:1.7.25'
   }
 }
+
+project(':distribution') {
+  apply plugin: 'application'
+  mainClassName = 'io.oconnormi.ddfadm.Main'
+  applicationName = 'ddfadm'
+  dependencies {
+    compile project(':cli')
+  }
+}

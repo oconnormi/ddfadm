@@ -73,5 +73,6 @@ class BootCommand implements Callable<Void> {
   @Override
   public Void call() throws Exception {
     println "Not Implemented Yet!"
+    return null
   }
 }

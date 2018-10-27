@@ -1,0 +1,14 @@
+plugins {
+  id 'groovy'
+}
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+dependencies {
+  compile 'org.codehaus.groovy:groovy-all:2.4.6'
+  compile 'org.slf4j:slf4j-simple:1.7.25'
+  testCompile 'org.spockframework:spock-core:1.2-groovy-2.4'
+}

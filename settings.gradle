@@ -9,4 +9,4 @@
 
 rootProject.name = 'ddfadm'
 
-include 'cli', 'distribution'
+include 'config', 'cli', 'distribution'

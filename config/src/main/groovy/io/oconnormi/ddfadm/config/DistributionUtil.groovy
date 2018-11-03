@@ -5,6 +5,8 @@ import java.nio.file.Paths
 
 class DistributionUtil {
     static final String BIN_DIR = 'bin'
+    static final String START_SCRIPT = 'start'
+    static final String STOP_SCRIPT = 'stop'
     static final String ETC_DIR = 'etc'
     static final String SYSTEM_DIR = 'system'
     static final String DATA_DIR = 'data'
@@ -26,18 +28,27 @@ class DistributionUtil {
      * @param home directory of the distribution
      * @param baseVersion of the distribution
      * @return path to system properties file
+     * @throws MalformedDistributionException when the system properties file does not exist
      */
-    Path systemPropertiesPath(Path home, Version baseVersion) {
+    Path systemPropertiesPath(Path home, Version baseVersion) throws MalformedDistributionException {
+        Path sysProps
         if (baseVersion.isGreaterThan(LEGACY_PROPS_VERSION)) {
-            return home.resolve(ETC_DIR).resolve(SYS_PROPS)
+            sysProps = home.resolve(ETC_DIR).resolve(SYS_PROPS)
+        } else {
+            sysProps = home.resolve(ETC_DIR).resolve(LEGACY_SYS_PROPS)
         }
 
-        return home.resolve(ETC_DIR).resolve(LEGACY_SYS_PROPS)
+        if (!sysProps.toFile().exists()) {
+            throw new MalformedDistributionException("System Properties file: ${sysProps.toString()} does not exist")
+        }
+
+        return sysProps
     }
 
     /**
      * Determines the path to the main system log file based on path to the distributions home directory
-     * and the name of the distribution.
+     * and the name of the distribution. Does nothing to ensure the existence of the log since it may not exist
+     * until the system has been started
      *
      * @param home directory of the distribution
      * @param name of the distribution
@@ -53,10 +64,14 @@ class DistributionUtil {
      *
      * @param home directory of the distribution
      * @return Version of DDF included in the distribution
+     * @throws MalformedDistributionException when the base version can not be determined
      */
-    Version baseVersion(Path home) {
+    Version baseVersion(Path home) throws MalformedDistributionException {
         Path platformPath = home.resolve(SYSTEM_DIR).resolve(PLATFORM_PATH)
         def versionMatcher = new FileNameByRegexFinder().getFileNames(platformPath.toString(), /\d+\.\d+\.\d+.*/)
+        if (versionMatcher.size() == 0) {
+            throw new MalformedDistributionException("Unable to find a version of DDF platform located under: ${platformPath}")
+        }
         String  versionFile = new File(versionMatcher.get(0)).getName()
         return new Version(versionFile)
     }
@@ -82,5 +97,35 @@ class DistributionUtil {
         Properties properties = new Properties()
         properties.load(new BufferedInputStream(new FileInputStream(systemProperties.toFile())))
         return properties.get(DISTRO_NAME_PROPERTY)
+    }
+
+    /**
+     * Determines the path to the start script for the distribution
+     *
+     * @param home directory of the distribution
+     * @return path to the distribution start script
+     * @throws MalformedDistributionException when start script is not found
+     */
+    Path startPath(Path home) throws MalformedDistributionException {
+        Path startPath = home.resolve(BIN_DIR).resolve(START_SCRIPT)
+        if (!startPath.toFile().exists()) {
+            throw new MalformedDistributionException("No start script found at: ${startPath.toString()}")
+        }
+        return startPath
+    }
+
+    /**
+     * Determines the path to the stop script for the distribution
+     *
+     * @param home directory of the distribution
+     * @return the path to the distribution's stop script
+     * @throws MalformedDistributionException when the stop script is not found
+     */
+    Path stopPath(Path home) throws MalformedDistributionException {
+        Path stopPath = home.resolve(BIN_DIR).resolve(STOP_SCRIPT)
+        if (!stopPath.toFile().exists()) {
+            throw new MalformedDistributionException("No stop script found at: ${stopPath.toString()}")
+        }
+        return stopPath
     }
 }

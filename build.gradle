@@ -16,6 +16,8 @@ allprojects {
   dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.6'
     testCompile 'org.spockframework:spock-core:1.2-groovy-2.4'
+    testRuntime "net.bytebuddy:byte-buddy:1.8.21"          // allows mocking of classes (in addition to interfaces)
+    testRuntime "org.objenesis:objenesis:2.6"    // allows mocking of classes without default constructor (together with CGLIB)
   }
 }
 

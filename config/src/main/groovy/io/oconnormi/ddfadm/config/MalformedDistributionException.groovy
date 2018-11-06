@@ -1,6 +1,10 @@
 package io.oconnormi.ddfadm.config
 
 class MalformedDistributionException extends Exception {
+    MalformedDistributionException() {
+        super()
+    }
+
     MalformedDistributionException(String message) {
         super(message)
     }
